@@ -1,0 +1,14 @@
+{
+   "name":  "PocketTherapist",
+   "version": "0.0.1",
+   "description": "Chat Application for Low Back Pain",
+   "dependencies":{
+      "socket.io":   "~1.4.5",
+      "mime":  "~1.2.7",
+      "express": "latest",
+      "express-generator": "latest",
+      "ejs": "latest",
+      "body-parser": "latest",
+      "morgan": "latest"
+   }
+}

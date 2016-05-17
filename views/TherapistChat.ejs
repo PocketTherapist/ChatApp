@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+   <head>
+      <meta charset="utf-8">
+      <title>TherapistChat</title>
+   </head>
+   <body>
+      <h1> Room Name: <%= Room %> </h1>
+      <h2> Your Name: <%= Name %> </h2>
+
+      <!-- messegeを書き込むform -->
+      <form id="send_msg">
+         <input type="text" id="msg">
+         <input type="text" id="name" value="<%= Name %>" hidden>
+         <input type="text" id="room" value="<%= Room %>" hidden>
+         <input type="submit" value="Send!">
+      </form><!-- messegeを書き込むform -->
+
+      <!-- 書き込んだことを表示する　-->
+      <ul id="logs"></ul>
+
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+      <script src="/socket.io/socket.io.js"></script>
+      <script>
+         var socket = io.connect();
+         socket.on("Therapist_connected",function(){});
+         socket.on("Therapist_publish",function(data){addMessage(data.value)});
+         socket.on("Therapist_disconnected",function(){});
+
+         function start(room,name){
+            console.log("connected Room:" + room + ",Name:" + name);
+            socket.json.emit("Therapist_connected",{Room:room, Name:name});
+         }
+         function addMessage(msg){
+            console.log(msg);
+            $('#logs').append($('<li>').text(msg));
+         }
+
+         $('#send_msg').submit(function(e){
+            e.preventDefault();//submitされても、ページが遷移しないようにする
+            //emit:イベントを送信、引数１:イベントの名前、引数２：送信内容ß
+            socket.json.emit("Therapist_publish",{
+               msg: $('#msg').val(),
+               name: $('#name').val(),
+               room: $('#room').val()
+            })
+            $('#msg').val('').focus();
+         });
+
+         addMessage("あなたは" + $('#name').val() + "として" + $('#room').val() + "に入室しました。");
+         start($('#room').val(),$('#name').val());
+
+
+      </script>
+   </body>
+<html>

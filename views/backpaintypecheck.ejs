@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+   <head>
+      <meta charset="utf-8">
+      <title>BackPain Type Check</title>
+   </head>
+   <body>
+      <h1>腰痛タイプチェック画面</h1>
+
+      <form method="POST" action="/FinishBackPainTypeCheck">
+         <p>Q1.現在感じている腰痛に関して、該当する回答にチェックして下さい。</p>
+         <p><input type="checkbox" name="riyu" value="1">現在の腰痛の発症年齢は、20歳未満もしくは、55歳を超えている。</p>
+         <p><input type="checkbox" name="riyu" value="2">最近の激しい外傷歴（転倒や交通事故など）がある。</p>
+         <p><input type="checkbox" name="riyu" value="3">絶え間ない痛みが続く（楽な姿勢がなく、夜や安静時も痛む）。</p>
+         <p><input type="checkbox" name="riyu" value="4">胸の痛みがある。</p>
+         <p><input type="checkbox" name="riyu" value="5">悪性腫瘍（ガン）の病歴がある。</p>
+         <p><input type="checkbox" name="riyu" value="6">長期間、副腎皮質ホルモン（ステロイド剤）を使用している。</p>
+         <p><input type="checkbox" name="riyu" value="7">免疫抑制剤の使用歴がある、もしくはHIVが陽性である。</p>
+         <p><input type="checkbox" name="riyu" value="8">全般的な体調不良である。</p>
+         <p><input type="checkbox" name="riyu" value="9">原因不明の体重減少がある。</p>
+         <p><input type="checkbox" name="riyu" value="10">腰痛の痛みが強いため腰が曲がり、体を伸ばせない。</p>
+         <p><input type="checkbox" name="riyu" value="11">背中や腰を叩くと、痛みを感じる。</p>
+         <p><input type="checkbox" name="riyu" value="12">身体の変形があると、医師等に言われたことがある。</p>
+         <p><input type="checkbox" name="riyu" value="13">発熱している。</p>
+         <p><input type="checkbox" name="riyu" value="14">尿/便失禁、頻尿、便秘や、陰部/肛門周囲の感覚の異常がある。</p>
+         <p><input type="checkbox" name="riyu" value="15">上記のいずれも該当するものはない</p>
+         <p><input type="checkbox" name="riyu" value="16">その他</p>
+
+         <p><input type="submit" value="送信する" onclick="finishQuestionnaire()"></p>
+      </form>
+
+      <!-- このページのインフォメーション -->
+      <form id="page_info">
+         <input type="test" id="role" value="Sub" hidden>
+      </form>
+
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+      <script src="/socket.io/socket.io.js"></script>
+      <script>
+
+         function finishQuestionnaire(){
+            window.close();
+            socket.emit("FinishQuestionnaire",{Name:"miyasato"});
+            livelink = false;
+         }
+      </script>
+   </body>
+<html>
