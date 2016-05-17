@@ -42,7 +42,7 @@ function answer(questionId,selectedOption,nextId){
 
 var livelink;
 function showFormButton(data){
-   var addComment = '<li> <div id=LinkButton>'
+   var addComment = '<li> <div id=FormButton>'
    addComment += '<button type="button" onclick="openForm(\''+ data.fid + '\',\''+ data.form + '\',\''+ data.next + '\')" >' + data.formname +'</button><br>';
    addComment += '</div>'
    $('#logs').append($(addComment));
@@ -51,12 +51,27 @@ function showFormButton(data){
 
 function openForm(fid,form,next){
    if(livelink){
+      $('.content').children('li').css('display','none');
       $('.content').children('li').eq(Number(fid)).css('display','block');
-      activeForm = [1 , 1 , 0 , 0];
+      $('.tab li').removeClass('select');
+      $('.tab li').eq(Number(fid)).addClass('select');
+      activeForm[Number(fid)] =  1;
    }else{
-      $('#LinkButton').parent().remove();
-      socekt.emit("nextOfLink",{Next:next});
+      $('#FormButton').parent().remove();
+      addMessage("期限がきれました");
+      //socekt.emit("nextOfForm",{Next:next});
    }
+}
+
+function finishQuestionnaire(){
+   $('.content').children('li').css('display','none');
+   $('.content').children('li').eq(0).css('display','block');
+   $('.tab li').removeClass('select');
+   $('.tab li').eq(0).addClass('select');
+   activeForm[1] = 0;
+   $('#FormButton').parent().remove();
+   addMessage("腰痛タイプチェック用紙提出");
+   socekt.emit("nextOfForm",{Next:""});
 }
 
 //現在の会話を終わらせて、ホーム画面に戻る

@@ -35,7 +35,7 @@
          </li>
          <li id="type_check" class="hide">
             <h2>腰痛タイプチェック</h2>
-            <form method="POST" action="/FinishBackPainTypeCheck">
+            <form>
                <p>Q1.現在感じている腰痛に関して、該当する回答にチェックして下さい。</p>
                <p><input type="checkbox" name="riyu" value="1">現在の腰痛の発症年齢は、20歳未満もしくは、55歳を超えている。</p>
                <p><input type="checkbox" name="riyu" value="2">最近の激しい外傷歴（転倒や交通事故など）がある。</p>
@@ -54,7 +54,7 @@
                <p><input type="checkbox" name="riyu" value="15">上記のいずれも該当するものはない</p>
                <p><input type="checkbox" name="riyu" value="16">その他</p>
 
-               <p><input type="submit" value="送信する" onclick="finishQuestionnaire()"></p>
+               <p><input type="button"  onclick="finishQuestionnaire()" value="送信する"></p>
             </form>
          </li>
          <li id="chat_theapist" class="hide">

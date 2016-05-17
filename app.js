@@ -71,43 +71,13 @@ app.post("/ReceptionChat",function(req,res){
                                     Room: req.body.name});
 });
 
-//過去のReception会話・専門家チャットをログとして残せるようにする。
-app.get("/Log",function(req,res){
-   console.log('Logを見る');
-   res.render('log.ejs');
-});
-/*
-app.post("/TherapistChat",function(req,res){
-   console.log('name:' + req.body.name + ',room:' + req.body.room);
-   res.render('TherapistChat.ejs',{Room: req.body.room, Name: req.body.name});
-});
-*/
 app.get("/TherapistChat",function(req,res){
    res.render('TherapistChat.ejs',{Room: 'TherapistRoom', Name: "hoge"});
 });
 
-app.get("/PatientChat",function(req,res){
-   res.render('TherapistChat.ejs',{Room: 'TherapistRoom', Name: "therapist"});
-});
 
 //Receptionからホーム画面へ戻る　＆　Receptionの会話を終わらせたとき(こっちは別途作る必要あり)
 app.get("/ToHome",function(req,res){
    console.log('Back to Home');
    res.render('index.ejs');
-});
-
-//腰痛タイプチェック画面
-app.get("/BackPainTypeCheck",function(req,res){
-   console.log('BackPainCheck');
-   res.render('backpaintypecheck.ejs');
-});
-app.post("/FinishBackPainTypeCheck",function(req,res){
-   console.log('BackPainCheck');
-   res.render('backpaintypecheck.ejs');
-});
-
-//優良治療院紹介画面
-app.get("/RecomendedClinic",function(req,res){
-   console.log('RecomendClinic');
-   res.render('recomendclinic.ejs');
 });
