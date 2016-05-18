@@ -81,3 +81,51 @@ app.get("/ToHome",function(req,res){
    console.log('Back to Home');
    res.render('index.ejs');
 });
+
+
+//腰痛タイプ説明ページ
+//筋・筋膜性腰痛
+app.get("/KinmakuSei",function(req,res){
+   console.log('Back to Home');
+   res.render('BackPainType/KinmakuSei.ejs');
+});
+//椎間関節性腰痛
+app.get("/TsuikankansetsuSei",function(req,res){
+   console.log('Back to Home');
+   res.render('BackPainType/TsuikankansetsuSei.ejs');
+});
+//椎間板腰痛
+app.get("/TsuikanbanSei",function(req,res){
+   console.log('Back to Home');
+   res.render('BackPainType/TsuikanbanSei.ejs');
+});
+//仙腸関節性腰痛
+app.get("/SenchokansetuSei",function(req,res){
+   console.log('Back to Home');
+   res.render('BackPainType/SenchokansetuSei.ejs');
+});
+//心因性腰痛
+app.get("/ShininSei",function(req,res){
+   console.log('Back to Home');
+   res.render('BackPainType/ShininSei.ejs');
+});
+//ヘルニア
+app.get("/Herunia",function(req,res){
+   console.log('Back to Home');
+   res.render('BackPainType/Herunia.ejs');
+});
+//脊柱管狭窄症
+app.get("/SekichukankyosakuSho",function(req,res){
+   console.log('Back to Home');
+   res.render('BackPainType/SekichukankyosakuSho.ejs');
+});
+//椎間関節性腰痛
+app.get("/YoutsuibunriSho",function(req,res){
+   console.log('Back to Home');
+   res.render('BackPainType/YoutsuibunriSho.ejs');
+});
+//変形性腰椎症
+app.get("/HenkeiseiYoutuiSho",function(req,res){
+   console.log('Back to Home');
+   res.render('BackPainType/HenkeiseiYoutuiSho.ejs');
+});
