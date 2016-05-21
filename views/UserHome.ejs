@@ -11,14 +11,16 @@
          <li id="type_check">腰痛タイプチェック</li>
          <li id="chat_theapist">専門家とチャット</li>
          <li id="recommend_clinic">優良治療院紹介</li>
+         <li id="payment">お支払い</li>
          <li id="log">今までの会話のログ</li>
+         <li id="my_profile">マイプロフィール</li>
       </ul>
       <ul class="content">
          <li id="reception">
             <h2>受付</h2>
-            <h3> Your Nmae: <%= Name %> </h3>
-            <form id="to_home" method="GET" action="/ToHome">
-               <input type="submit" value="Homeへ">
+            <h3> Your Name: <%= Name %> </h3>
+            <form id="to_home" method="GET" action="/UserLogin">
+               <input type="submit" value="ログアウト">
             </form>
             <form id="Finish" method="GET" action="/ToHome">
                <!-- <input type="submit" value="会話を終わらせる" onclick='return confirm("会話がリセットされます。リセットされた会話は、ログで見ることができます。よろしいですか？");'>　-->
@@ -27,11 +29,6 @@
             <!-- 書き込んだことを表示する　-->
             <ul id="logs"></ul>
 
-            <!-- このページのインフォメーション -->
-            <form id="hide_info">
-               <input type="text" id="name" value="<%= Name %>" hidden>
-               <input type="text" id="room" value="<%= Room %>" hidden>
-            </form>
          </li>
          <li id="type_check" class="hide">
             <h2>腰痛タイプチェック</h2>
@@ -54,19 +51,30 @@
                <p><input type="checkbox" name="riyu" value="15">上記のいずれも該当するものはない</p>
                <p><input type="checkbox" name="riyu" value="16">その他</p>
 
-               <p><input type="button"  onclick="finishQuestionnaire()" value="送信する"></p>
+               <p><input type="button"  onclick="finishToFill_BackPainTypeCheckForm()" value="「腰痛タイプチェック用紙」を提出する"></p>
             </form>
          </li>
          <li id="chat_theapist" class="hide">
             <h2>専門家とチャット</h2>
+            <form>
+               <p><input type="button" onclick='finishTherapistChat()' value="「専門家とのチャット」を終了する"</p>
+            </form>
          </li>
          <li id="recommend_clinic" class="hide">
             <h2>治療院紹介</h2>
+            <form>
+               <p><input type="button" onclick='finishToFill_RecommendClinicForm()' value="「優良治療院紹介用紙」を提出する"</p>
+            </form>
+         </li>
+         <li id="payment" class="hide">
+            <h2>お支払い</h2>
          </li>
          <li id="chat_log" class="hide">
             <h2>今までの会話ログ</h2>
          </li>
-
+         <li id="my_profile" class="hide">
+            <h2>マイプロフィール</h2>
+         </li>
 
       </ul>
 
@@ -75,6 +83,7 @@
       <form id="page_info">
          <input type="text" id="name" value="<%= Name %>" hidden>
          <input type="text" id="room" value="<%= Room %>" hidden>
+         <input type="text" id="next" value="" hidden >
       </form>
 
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" type='text/javascript'></script>
@@ -89,16 +98,12 @@
                //indexという変数に代入します。
                var index = $('.tab li').index(this);
                if (activeForm[index]){
-
                   //コンテンツを一度すべて非表示にし、
                   $('.content').children('li').css('display','none');
-
                   //クリックされたタブと同じ順番のコンテンツを表示します。
                   $('.content').children('li').eq(index).css('display','block');
-
                   //一度タブについているクラスselectを消し、
                   $('.tab li').removeClass('select');
-
                   //クリックされたタブのみにクラスselectをつけます。
                   $(this).addClass('select')
                };

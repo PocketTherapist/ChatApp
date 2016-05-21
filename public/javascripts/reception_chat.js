@@ -1,24 +1,29 @@
 var socket = io.connect();
 var activeForm;
+var pass_next;
 
 $(document).ready(function(){
 
    startChat($('#room').val(),$('#name').val());
-   socket.on("message",function(data){addMessage(data.message)});
+   socket.on("message",function(data){addMessage(data)});
    socket.on("option",function(data){showOptionButton(data)});
-   socket.on("type",function(data){showTypeButton(data)});
+   socket.on("backpain_type",function(data){showBackPainTypeButton(data)});
    socket.on("form",function(data){showFormButton(data)});
 });
 
 function startChat(room,name){
    console.log("connected to ReceptionChat Name:" + name + ",Room:" + room);
    socket.emit("connected",{ Name:name});
-   activeForm = [1 , 0 , 0 , 0];
+   activeForm = [1 , 0 , 0 , 0 , 0 , 0 , 1];
 }
 
-function addMessage(msg){
-   console.log(msg);
-   $('#logs').append($('<li>').text(msg));
+function addMessage(data){
+   console.log("addMessage:" + data.Message );
+   $('#logs').append($('<li>').text(data.Message));
+   if(data.Next){
+      console.log("addMessage Next:" + data.Next);
+      pass_next = data.Next;
+   }
 }
 
 function showOptionButton(data){
@@ -37,49 +42,48 @@ function answer(questionId,selectedOption,nextId){
                          SelectedOption:selectedOption,
                          NextID: nextId});
    $('#OptionButton').parent().remove();
-   addMessage(selectedOption);
+   addMessage({Message:selectedOption});
 }
 
 var livelink;
 function showFormButton(data){
    var addComment = '<li> <div id=FormButton>'
-   addComment += '<button type="button" onclick="openForm(\''+ data.fid + '\',\''+ data.form + '\',\''+ data.next + '\')" >' + data.formname +'</button><br>';
+   addComment += '<button type="button" onclick="openForm(\''+ data.Fid + '\',\''+ data.Next + '\')" >' + data.Formname +'</button><br>';
    addComment += '</div>'
+   console.log(addComment);
    $('#logs').append($(addComment));
    livelink = true;
 }
 
-function openForm(fid,form,next){
+function openForm(fid,next){
    if(livelink){
       $('.content').children('li').css('display','none');
       $('.content').children('li').eq(Number(fid)).css('display','block');
       $('.tab li').removeClass('select');
       $('.tab li').eq(Number(fid)).addClass('select');
       activeForm[Number(fid)] =  1;
-      var addInfo = '<input type="text" id="next" value="' + next + '" hidden>';
-      $('#hide_info').append($(addInfo));
+      pass_next = next;
    }else{
       $('#FormButton').parent().remove();
-      addMessage("期限がきれました");
+      addMessage({Message:"期限がきれました"});
       //socekt.emit("nextOfForm",{Next:next});
    }
 }
 
-function finishQuestionnaire(){
+function finishToFill_BackPainTypeCheckForm(){
    $('.content').children('li').css('display','none');
    $('.content').children('li').eq(0).css('display','block');
    $('.tab li').removeClass('select');
    $('.tab li').eq(0).addClass('select');
    activeForm[1] = 0;
    $('#FormButton').parent().remove();
-   addMessage("腰痛タイプチェック用紙提出");
-   var next = $('#next').val();
+   addMessage({Message:"腰痛タイプチェック用紙提出"});
    //＃＃アンケート用紙の回答結果をサーバーに送る
-   console.log("firstQuestionnaire:" + next);
-   socket.emit("nextOfQForm",{Next:next});
+   console.log("finishToFill_BackPainTypeCheckForm:" + pass_next);
+   socket.emit("nextOfBackPainTypeQForm",{Next:pass_next});
 }
 
-function showTypeButton(data){
+function showBackPainTypeButton(data){
    var addComment = '<li> <div id=TypeButton>';
    console.log(data.Type.length);
    for(var i=0; i < data.Type.length; i++){
@@ -88,8 +92,35 @@ function showTypeButton(data){
    }
    addComment += '</div>';
    $('#logs').append($(addComment));
-   socket.emit("nextOfType");
+   socket.emit("nextOfBackPainType");
 }
+
+function finishTherapistChat(data){
+   $('.content').children('li').css('display','none');
+   $('.content').children('li').eq(0).css('display','block');
+   $('.tab li').removeClass('select');
+   $('.tab li').eq(0).addClass('select');
+   activeForm[2] = 0;
+   $('#FormButton').parent().remove();
+   addMessage({Message:"専門家とのチャット終了"});
+      //＃＃アンケート用紙の回答結果をサーバーに送る
+   console.log("finishTherapistChat:" + pass_next);
+   socket.emit("nextOfTherapistChat",{Next:pass_next});
+}
+
+
+function finishToFill_RecommendClinicForm(data){
+   $('.content').children('li').css('display','none');
+   $('.content').children('li').eq(0).css('display','block');
+   $('.tab li').removeClass('select');
+   $('.tab li').eq(0).addClass('select');
+   activeForm[3] = 0;
+   $('#FormButton').parent().remove();
+   addMessage({Message:"優良治療院紹介記入用紙提出"});
+   //＃＃アンケート用紙の回答結果をサーバーに送る
+   console.log("finishToFill_RecommendClinicForm:" + pass_next);
+}
+
 
 //現在の会話を終わらせて、ホーム画面に戻る
 function closeConversation(){

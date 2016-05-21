@@ -16,7 +16,7 @@ receptionChat.listen(server);
 
 //セラピストとのチャット用
 //var therapistChat = require('./lib/therapist_chat_server.js');
-//therapistChat.listen(server);
+///TherapistChatlisten(server);
 
 server.listen(port,function(){
    console.log("server start...");
@@ -54,35 +54,33 @@ app.use(function(err, req, res, next) { //errorHandler
 /*###############################
 ###         画面遷移           ###
 ###############################*/
-
 app.get("/",function(req,res){
    res.render('PreHome.ejs');
    return;
 });
 
-app.get("/UserHome",function(req,res){
-   res.render('index.ejs');
+//== ユーザーサイド
+
+app.get("/UserLogin",function(req,res){
+   res.render('UserLogin.ejs');
    return;
 });
 
-app.post("/ReceptionChat",function(req,res){
+app.post("/UserHome",function(req,res){
    console.log('name:' + req.body.name);
-   res.render('ReceptionChat.ejs',{ Name: req.body.name,
+   res.render('UserHome.ejs',{ Name: req.body.name,
                                     Room: req.body.name});
 });
-
-app.get("/TherapistChat",function(req,res){
-   res.render('TherapistChat.ejs',{Room: 'TherapistRoom', Name: "hoge"});
-});
-
 
 //Receptionからホーム画面へ戻る　＆　Receptionの会話を終わらせたとき(こっちは別途作る必要あり)
 app.get("/ToHome",function(req,res){
    console.log('Back to Home');
-   res.render('index.ejs');
+   res.render('UserHome.ejs',{Name: req.body.name,
+                              Room: req.body.name});
 });
 
-
+// ↓　埋め込む内容が違うだけで、同じejsでDBから何を取り出してきて、
+//そのボタン・人に対して何を表示するかといった対応するようにしたい。
 //腰痛タイプ説明ページ
 //筋・筋膜性腰痛
 app.get("/KinmakuSei",function(req,res){
@@ -128,4 +126,29 @@ app.get("/YoutsuibunriSho",function(req,res){
 app.get("/HenkeiseiYoutuiSho",function(req,res){
    console.log('Back to Home');
    res.render('BackPainType/HenkeiseiYoutuiSho.ejs');
+});
+
+
+//=== 専門家サイド
+app.get("/TherapistLogin",function(req,res){
+   res.render('TherapistLogin.ejs');
+   return;
+});
+
+app.post("/TherapistHome",function(req,res){
+   console.log('name:' + req.body.name);
+   res.render('TherapistHome.ejs',{ Name: req.body.name,
+                                    Room: req.body.name});
+});
+
+//=== 管理者サイト
+app.get("/AdministratorLogin",function(req,res){
+   res.render('AdministratorLogin.ejs');
+   return;
+});
+
+app.post("/AdministratorHome",function(req,res){
+   console.log('name:' + req.body.name);
+   res.render('AdministratorHome.ejs',{ Name: req.body.name,
+                                    Room: req.body.name});
 });
