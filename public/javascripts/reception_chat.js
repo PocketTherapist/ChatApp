@@ -1,6 +1,6 @@
 var socket = io.connect();
 var activeForm;
-var pass_next;
+var pass_nextId;
 
 $(document).ready(function(){
 
@@ -20,9 +20,9 @@ function startChat(room,name){
 function addMessage(data){
    console.log("addMessage:" + data.Message );
    $('#logs').append($('<li>').text(data.Message));
-   if(data.Next){
-      console.log("addMessage Next:" + data.Next);
-      pass_next = data.Next;
+   if(data.NextID){
+      console.log("addMessage NextID:" + data.NextID);
+      pass_next = data.NextID;
    }
 }
 
@@ -31,7 +31,7 @@ function showOptionButton(data){
    console.log(data.Option.length);
    for(var i=0; i < data.Option.length; i++){
       console.log(data.Option[i]);
-     addComment += '<button type="button" onclick="answer(\''+ data.Qid + '\',\''+ data.Option[i] + '\',\''+ data.Next[i] + '\')" >' + data.Option[i] +'</button><br>';
+     addComment += '<button type="button" onclick="answer(\''+ data.Qid + '\',\''+ data.Option[i] + '\',\''+ data.NextID[i] + '\')" >' + data.Option[i] +'</button><br>';
    }
    addComment += '</div>';
    $('#logs').append($(addComment));
@@ -48,21 +48,21 @@ function answer(questionId,selectedOption,nextId){
 var livelink;
 function showFormButton(data){
    var addComment = '<li> <div id=FormButton>'
-   addComment += '<button type="button" onclick="openForm(\''+ data.Fid + '\',\''+ data.Next + '\')" >' + data.Formname +'</button><br>';
+   addComment += '<button type="button" onclick="openForm(\''+ data.Fid + '\',\''+ data.NextID + '\')" >' + data.Formname +'</button><br>';
    addComment += '</div>'
    console.log(addComment);
    $('#logs').append($(addComment));
    livelink = true;
 }
 
-function openForm(fid,next){
+function openForm(fid,nextId){
    if(livelink){
       $('.content').children('li').css('display','none');
       $('.content').children('li').eq(Number(fid)).css('display','block');
       $('.tab li').removeClass('select');
       $('.tab li').eq(Number(fid)).addClass('select');
       activeForm[Number(fid)] =  1;
-      pass_next = next;
+      pass_nextId = nextId;
    }else{
       $('#FormButton').parent().remove();
       addMessage({Message:"期限がきれました"});
@@ -79,8 +79,8 @@ function finishToFill_BackPainTypeCheckForm(){
    $('#FormButton').parent().remove();
    addMessage({Message:"腰痛タイプチェック用紙提出"});
    //＃＃アンケート用紙の回答結果をサーバーに送る
-   console.log("finishToFill_BackPainTypeCheckForm:" + pass_next);
-   socket.emit("nextOfBackPainTypeQForm",{Next:pass_next});
+   console.log("finishToFill_BackPainTypeCheckForm:" + pass_nextId);
+   socket.emit("nextOfBackPainTypeQForm",{NextID:pass_nextId});
 }
 
 function showBackPainTypeButton(data){
@@ -104,8 +104,20 @@ function finishTherapistChat(data){
    $('#FormButton').parent().remove();
    addMessage({Message:"専門家とのチャット終了"});
       //＃＃アンケート用紙の回答結果をサーバーに送る
-   console.log("finishTherapistChat:" + pass_next);
-   socket.emit("nextOfTherapistChat",{Next:pass_next});
+   socket.emit("nextOfTherapistChat");
+}
+
+function finishPayment(data){
+   $('.content').children('li').css('display','none');
+   $('.content').children('li').eq(0).css('display','block');
+   $('.tab li').removeClass('select');
+   $('.tab li').eq(0).addClass('select');
+   activeForm[4] = 0;
+   $('#FormButton').parent().remove();
+   addMessage({Message:"支払い完了しました"});
+      //＃＃アンケート用紙の回答結果をサーバーに送る
+   console.log(":" + pass_nextId);
+   socket.emit("nextOfTherapistChatPayment");
 }
 
 
@@ -118,7 +130,8 @@ function finishToFill_RecommendClinicForm(data){
    $('#FormButton').parent().remove();
    addMessage({Message:"優良治療院紹介記入用紙提出"});
    //＃＃アンケート用紙の回答結果をサーバーに送る
-   console.log("finishToFill_RecommendClinicForm:" + pass_next);
+   console.log("finishToFill_RecommendClinicForm:" + pass_nextId);
+   socket.emit("nextOfRecommendClinicForm");
 }
 
 
