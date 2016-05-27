@@ -1,6 +1,5 @@
 var socket = io.connect();
 var activeForm;
-var pass_nextId;
 
 $(document).ready(function(){
 
@@ -20,10 +19,12 @@ function startChat(room,name){
 function addMessage(data){
    console.log("addMessage:" + data.Message );
    $('#logs').append($('<li>').text(data.Message));
+   /*
    if(data.NextID){
       console.log("addMessage NextID:" + data.NextID);
       pass_next = data.NextID;
    }
+   */
 }
 
 function showOptionButton(data){
@@ -79,8 +80,7 @@ function finishToFill_BackPainTypeCheckForm(){
    $('#FormButton').parent().remove();
    addMessage({Message:"腰痛タイプチェック用紙提出"});
    //＃＃アンケート用紙の回答結果をサーバーに送る
-   console.log("finishToFill_BackPainTypeCheckForm:" + pass_nextId);
-   socket.emit("nextOfBackPainTypeQForm",{NextID:pass_nextId});
+   socket.emit("nextOfBackPainTypeQForm");
 }
 
 function showBackPainTypeButton(data){
