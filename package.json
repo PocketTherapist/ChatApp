@@ -10,5 +10,8 @@
       "ejs": "latest",
       "body-parser": "latest",
       "morgan": "latest"
+   },
+   "scripts": {
+    "start": "nodemon app.js"
    }
 }
