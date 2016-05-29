@@ -14,6 +14,7 @@ $(document).ready(function(){
    socket.on("showBackPainTypeOfUser",function(data){showBackPainTypeButton(data)});
    socket.on("activateForm",function(data){showFormButton(data)});
    socket.on("showClinicForUser",function(data){showClinicButton(data)});
+   socket.on("removeNowComment",function(data){removeNowComment(data)});
 });
 
 function startChat(room,name){
@@ -24,7 +25,7 @@ function startChat(room,name){
 
 function addMessage(data){
    console.log("addMessage:" + data.Message );
-   $('#logs').append($('<li>').text(data.Message));
+   $('#reception_chatlogs').append($('<li>').text(data.Message));
 }
 
 function showOptionButton(data){
@@ -35,7 +36,7 @@ function showOptionButton(data){
      addComment += '<button type="button" onclick="answer(\''+ data.Qid + '\',\''+ data.Option[i] + '\',\''+ data.NextID[i] + '\')" >' + data.Option[i] +'</button><br>';
    }
    addComment += '</div>';
-   $('#logs').append($(addComment));
+   $('#reception_chatlogs').append($(addComment));
 }
 
 function answer(questionId,selectedOption,nextId){
@@ -51,7 +52,7 @@ function showFormButton(data){
    var addComment = '<li> <div id=FormButton>';
    addComment += '<button type="button" onclick="openForm(\''+ data.Fid + '\')" >' + data.Formname +'</button><br>';
    addComment += '</div>';
-   $('#logs').append($(addComment));
+   $('#reception_chatlogs').append($(addComment));
    livelink = true;
 }
 
@@ -72,23 +73,29 @@ function openForm(fid){
 function showClinicButton(data){
    var addComment = '<li> <div id=ClinicButton>';
    console.log(data.Clinic.length);
+   // TODO: insert GOOGLE MAP with pointer!
    addComment += '<p>（マップ表示する！！）</p>';
    for(var i=0; i < data.Clinic.length; i++){
       console.log(data.Clinic[i].shopname + data.Clinic[i].consultationhours);
       addComment += '<button type="button" onclick="window.open(\''+ data.Clinic[i].url + '\')" >' + data.Clinic[i].shopname +'</button>';
-      addComment += '<button type="button" onclick="selectClinic(\''+data.Clinic[i].shopname'\')"> 予約する </button><br>';
+      addComment += '<button type="button" onclick="selectClinic(\''+ data.Clinic[i].shopname + '\')" >予約する</button><br>';
    }
+   addComment += '<button type="button" onclick="selectClinic()" > 予約しない </button>';
    addComment += '</div>';
-   $('#logs').append($(addComment));
-   socket.emit("nextOfBackPainType");
+   $('#reception_chatlogs').append($(addComment));
    //initMap();
 }
 
-function selectClinic(){
+function selectClinic(data){
 //予約する、やめるのボタンで確認
-
+   socket.emit("nextOfSelectClinic",{shopname:data});
 }
 
+function removeNowComment(data){
+   $('#reception_chatlogs').find(':last').remove();
+   $('#reception_chatlogs').find(':last').remove();
+   socket.emit("backNextId");
+}
 
 function initMap() {
   var myLatLng = {lat: -25.363, lng: 131.044};
@@ -126,7 +133,7 @@ function showBackPainTypeButton(data){
       addComment += '<button type="button" onclick="window.open(\''+ data.Type[i].typelink + '\')" >' + data.Type[i].typename +'</button><br>';
    }
    addComment += '</div>';
-   $('#logs').append($(addComment));
+   $('#reception_chatlogs').append($(addComment));
    socket.emit("nextOfBackPainType");
 }
 

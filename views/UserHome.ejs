@@ -28,7 +28,7 @@
                <input type="submit" value="会話を終わらせる" onclick=closeConversation()>
             </form>
             <!-- 書き込んだことを表示する　-->
-            <ul id="logs"></ul>
+            <ul id="reception_chatlogs"></ul>
 
          </li>
          <li id="type_check" class="hide">
@@ -55,33 +55,44 @@
                <p><input type="button"  onclick="finishToFill_BackPainTypeCheckForm()" value="「腰痛タイプチェック用紙」を提出する"></p>
             </form>
          </li>
+
          <li id="chat_theapist" class="hide">
             <h2>専門家とチャット</h2>
             <form>
+               <ul id="therapist_chatlogs"></ul>
+               <form id='send-form'>
+                  <input id='send-message' />
+                  <input id='send-button' type='submit' value='Send' />
+               </form>
                <p><input type="button" onclick='finishTherapistChat()' value="「専門家とのチャット」を終了する"</p>
             </form>
          </li>
+
          <li id="recommend_clinic" class="hide">
             <h2>治療院紹介</h2>
             <form>
                <p><input type="button" onclick='finishToFill_RecommendClinicForm()' value="「優良治療院紹介用紙」を提出する"</p>
             </form>
          </li>
+
          <li id="chat_clinic" class="hide">
             <h2>治療院と予約チャット</h2>
             <form>
                <p><input type="button" onclick='finishBooking()' value="予約を完了する"</p>
             </form>
          </li>
+
          <li id="payment" class="hide">
             <h2>お支払い</h2>
             <form>
                <p><input type="button" onclick='finishPayment()' value="支払いを完了する"</p>
             </form>
          </li>
+
          <li id="chat_log" class="hide">
             <h2>今までの会話ログ</h2>
          </li>
+
          <li id="my_profile" class="hide">
             <h2>マイプロフィール</h2>
          </li>
