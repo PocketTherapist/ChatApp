@@ -49,6 +49,10 @@ function answer(questionId,selectedOption,nextId){
 
 var livelink;
 function showFormButton(data){
+   if(data.Fid === "4"){
+      $('#ClinicButton').parent().prev().remove();
+      $('#ClinicButton').parent().remove();
+   }
    var addComment = '<li> <div id=FormButton>';
    addComment += '<button type="button" onclick="openForm(\''+ data.Fid + '\')" >' + data.Formname +'</button><br>';
    addComment += '</div>';
@@ -186,16 +190,16 @@ function finishToFill_RecommendClinicForm(){
 }
 
 //### 治療院予約チャットのフォーム ######################
-function finishToFill_RecommendClinicForm(){
+function finishBooking(){
    $('.content').children('li').css('display','none');
    $('.content').children('li').eq(0).css('display','block');
    $('.tab li').removeClass('select');
    $('.tab li').eq(0).addClass('select');
    activeForm[4] = 0;
    $('#FormButton').parent().remove();
-   addMessage({Message:"優良治療院紹介記入用紙提出"});
+   addMessage({Message:"優良治療院予約終了"});
    //＃＃アンケート用紙の回答結果をサーバーに送る
-   socket.emit("nextOfRecommendClinicForm");
+   socket.emit("nextOfBookingChat");
 }
 
 
