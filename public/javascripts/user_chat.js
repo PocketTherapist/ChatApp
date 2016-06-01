@@ -15,11 +15,45 @@ $(document).ready(function(){
    socket.on("activateForm",function(data){showFormButton(data)});
    socket.on("showClinicForUser",function(data){showClinicButton(data)});
    socket.on("removeNowComment",function(data){removeNowComment(data)});
+
+   //専門家との会話
+   socket.on("message2U",function(data){showMessageT2U(data)});
+
+
 });
+
+function addMessageFromT(data){
+   console.log("addMessage:" + data.Message );
+   $('#reception_chatlogs').append($('<li>').text(data.Message));
+}
+
+function sendMessageU2T(){
+   var message = $('#sendU2T-message').val();
+   console.log('Therapist Chat MessageU2T:' + message);
+
+   socket.emit('messageU2T',{Message:message});
+
+   $('#therapist_chatlogs').append($('<li>').text(message));
+   $('#therapist_chatlogs').scrollTop($('therapist_chatlogs').prop('scrollHeight'));
+
+   $('#sendU2T-message').val('');
+}
+
+function showMessageT2U(data){
+   console.log("showMessageT2U:"+ data.Message);
+   var message = data.Message;
+   $('#therapist_chatlogs').append($('<li>').text(message));
+   $('#therapist_chatlogs').scrollTop($('therapist_chatlogs').prop('scrollHeight'));
+}
+
+
+
+
 
 function startChat(room,name){
    console.log("connected to ReceptionChat Name:" + name + ",Room:" + room);
    socket.emit("connected",{ Name:name});
+   console.log("SocketID of User:" + socket.id);
    activeForm = [1 , 0 , 0 , 0 , 0 , 0 , 0 , 1];
 }
 
@@ -214,3 +248,5 @@ function finishPayment(){
    addMessage({Message:"支払い完了しました"});
    socket.emit("nextOfTherapistChatPayment");
 }
+
+//＊＊＊＊＊＊＊＊＊　専門家とのチャット部分　＊＊＊＊

@@ -11,12 +11,9 @@ var app = express();
 var server = http.createServer(app);
 
 //受付用のチャット
-var receptionChat = require('./lib/reception_chat_server.js');
+var receptionChat = require('./lib/chat_server.js');
 receptionChat.listen(server);
 
-//セラピストとのチャット用
-//var therapistChat = require('./lib/therapist_chat_server.js');
-///TherapistChatlisten(server);
 
 server.listen(port,function(){
    console.log("server start...");

@@ -58,14 +58,16 @@
 
          <li id="chat_theapist" class="hide">
             <h2>専門家とチャット</h2>
-            <form>
                <ul id="therapist_chatlogs"></ul>
-               <form id='send-form'>
-                  <input id='send-message' />
-                  <input id='send-button' type='submit' value='Send' />
+
+               <form id='sendU2T-form' onsubmit='sendMessageU2T();return false; '>
+
+                  <input id='sendU2T-message' type='text' />
+                  <input type='submit' value='Send'>
                </form>
-               <p><input type="button" onclick='finishTherapistChat()' value="「専門家とのチャット」を終了する"</p>
-            </form>
+               <form>
+                  <p><input type="button" onclick='finishTherapistChat()' value="「専門家とのチャット」を終了する"</p>
+               </form>
          </li>
 
          <li id="recommend_clinic" class="hide">
@@ -107,10 +109,11 @@
          <input type="text" id="next" value="" hidden >
       </form>
 
-      <<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAA15FQKdIKppAxuJTEH2HgTgDC8ZOjK-Q"></script>
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAA15FQKdIKppAxuJTEH2HgTgDC8ZOjK-Q"></script>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" type='text/javascript'></script>
       <script src="/socket.io/socket.io.js" type='text/javascript'></script>
-      <script src="javascripts/reception_chat.js" type='text/javascript'></script>
+      <script src="javascripts/user_chat.js" type='text/javascript'></script>
+      <script src="javascripts/therapist_chat.js" type='text/javascript'></script>
 
 
       <script>
