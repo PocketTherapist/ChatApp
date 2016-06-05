@@ -1,4 +1,6 @@
-var socket = io.connect();
+var socketR = io('/receptionChat').connect();
+var socketT = io('/therapistChat').connect();
+var socketB = io('/bookingChat').connect();
 var activeForm;
 
 
@@ -9,15 +11,15 @@ var activeForm;
 $(document).ready(function(){
 
    startChat($('#room').val(),$('#name').val());
-   socket.on("showMessage",function(data){addMessage(data)});
-   socket.on("showOption",function(data){showOptionButton(data)});
-   socket.on("showBackPainTypeOfUser",function(data){showBackPainTypeButton(data)});
-   socket.on("activateForm",function(data){showFormButton(data)});
-   socket.on("showClinicForUser",function(data){showClinicButton(data)});
-   socket.on("removeNowComment",function(data){removeNowComment(data)});
+   socketR.on("showMessage",function(data){addMessage(data)});
+   socketR.on("showOption",function(data){showOptionButton(data)});
+   socketR.on("showBackPainTypeOfUser",function(data){showBackPainTypeButton(data)});
+   socketR.on("activateForm",function(data){showFormButton(data)});
+   socketR.on("showClinicForUser",function(data){showClinicButton(data)});
+   socketR.on("removeNowComment",function(data){removeNowComment(data)});
 
    //専門家との会話
-   socket.on("message2U",function(data){showMessageT2U(data)});
+   socketT.on("message2U",function(data){showMessageT2U(data)});
 
 
 });
@@ -31,7 +33,8 @@ function sendMessageU2T(){
    var message = $('#sendU2T-message').val();
    console.log('Therapist Chat MessageU2T:' + message);
 
-   socket.emit('messageU2T',{Message:message});
+   socketT.emit('messageU2T',{Message:message});
+
 
    $('#therapist_chatlogs').append($('<li>').text(message));
    $('#therapist_chatlogs').scrollTop($('therapist_chatlogs').prop('scrollHeight'));
@@ -52,8 +55,11 @@ function showMessageT2U(data){
 
 function startChat(room,name){
    console.log("connected to ReceptionChat Name:" + name + ",Room:" + room);
-   socket.emit("connected",{ Name:name});
-   console.log("SocketID of User:" + socket.id);
+   socketR.emit("connect2ReceptionNameSpace",{ Name:name});
+   console.log("SocketID of User(client)after connection:" + socket.id);
+   socketT.emit("connect2TherapistNameSpace",{Name:name});
+   //socketB.emit("connect2BookingNameSpace",{Name:name});
+
    activeForm = [1 , 0 , 0 , 0 , 0 , 0 , 0 , 1];
 }
 
@@ -74,7 +80,7 @@ function showOptionButton(data){
 }
 
 function answer(questionId,selectedOption,nextId){
-   socket.emit("answer",{QuestionID: questionId,
+   socketR.emit("answer",{QuestionID: questionId,
                          SelectedOption:selectedOption,
                          NextID: nextId});
    $('#OptionButton').parent().remove();
@@ -126,13 +132,13 @@ function showClinicButton(data){
 
 function selectClinic(data){
 //予約する、やめるのボタンで確認
-   socket.emit("nextOfSelectClinic",{shopname:data});
+   socketR.emit("nextOfSelectClinic",{shopname:data});
 }
 
 function removeNowComment(data){
    $('#reception_chatlogs').find(':last').remove();
    $('#reception_chatlogs').find(':last').remove();
-   socket.emit("backNextId");
+   socketR.emit("backNextId");
 }
 
 function initMap() {
@@ -160,7 +166,7 @@ function finishToFill_BackPainTypeCheckForm(){
    $('#FormButton').parent().remove();
    addMessage({Message:"腰痛タイプチェック用紙提出"});
    //＃＃アンケート用紙の回答結果をサーバーに送る
-   socket.emit("nextOfBackPainTypeQForm");
+   socketR.emit("nextOfBackPainTypeQForm");
 }
 
 function showBackPainTypeButton(data){
@@ -172,7 +178,7 @@ function showBackPainTypeButton(data){
    }
    addComment += '</div>';
    $('#reception_chatlogs').append($(addComment));
-   socket.emit("nextOfBackPainType");
+   socketR.emit("nextOfBackPainType");
 }
 
 //=== １度チャットを終わらせて、会話のログ画面へ移すためのボタン
@@ -195,7 +201,7 @@ function finishToFill_BackPainTypeCheckForm(){
    $('#FormButton').parent().remove();
    addMessage({Message:"腰痛タイプチェック用紙提出"});
    //＃＃アンケート用紙の回答結果をサーバーに送る
-   socket.emit("nextOfBackPainTypeQForm");
+   socketR.emit("nextOfBackPainTypeQForm");
 }
 
 //### 専門家チャットのフォーム ###################
@@ -208,7 +214,7 @@ function finishTherapistChat(){
    $('#FormButton').parent().remove();
    addMessage({Message:"専門家とのチャット終了"});
       //＃＃アンケート用紙の回答結果をサーバーに送る
-   socket.emit("nextOfTherapistChat");
+   socketR.emit("nextOfTherapistChat");
 }
 //### 治療院紹介用紙のフォーム ######################
 function finishToFill_RecommendClinicForm(){
@@ -220,7 +226,7 @@ function finishToFill_RecommendClinicForm(){
    $('#FormButton').parent().remove();
    addMessage({Message:"優良治療院紹介記入用紙提出"});
    //＃＃アンケート用紙の回答結果をサーバーに送る
-   socket.emit("nextOfRecommendClinicForm");
+   socketR.emit("nextOfRecommendClinicForm");
 }
 
 //### 治療院予約チャットのフォーム ######################
@@ -233,7 +239,7 @@ function finishBooking(){
    $('#FormButton').parent().remove();
    addMessage({Message:"優良治療院予約終了"});
    //＃＃アンケート用紙の回答結果をサーバーに送る
-   socket.emit("nextOfBookingChat");
+   socketR.emit("nextOfBookingChat");
 }
 
 
@@ -246,7 +252,7 @@ function finishPayment(){
    activeForm[5] = 0;
    $('#FormButton').parent().remove();
    addMessage({Message:"支払い完了しました"});
-   socket.emit("nextOfTherapistChatPayment");
+   socketR.emit("nextOfTherapistChatPayment");
 }
 
 //＊＊＊＊＊＊＊＊＊　専門家とのチャット部分　＊＊＊＊

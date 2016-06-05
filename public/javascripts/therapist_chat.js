@@ -1,4 +1,4 @@
-var socket = io.connect();
+var socket = io('/therapistChat').connect();
 var activeForm;
 
 
@@ -10,7 +10,7 @@ $(document).ready(function(){
 
    startTherapistChat($('#room').val(),$('#name').val());
 
-   socekt.on("rooms",function(data){showRoomlists(data)});
+   socket.on("rooms",function(data){showRoomlists(data)});
    socket.on("message2T",function(data){showMessageU2T(data)});
 
    //現在いるユーザーを表示
@@ -41,8 +41,8 @@ function showMessageU2T(data){
 
 
 function startTherapistChat(room,name){
-   console.log("connected to TherapistChat Name:" + name + ",Room:" + room);
-   socket.emit('connected2T')
+   console.log("connect to TherapistChat Name:" + name + ",Room:" + room);
+   socket.emit('connect2TherapistNameSpace');
    console.log("SocketID of therapist:"+ socket.id );
 }
 
@@ -51,7 +51,7 @@ function showRoomlists(rooms){
    for(var room in rooms){
       room = room.substring(1, room.length);
       if(room !=''){
-         $('#room-list').append(divEscapedContentElement(room));
+         $('#room-list').append(room);
       }
    }
    $('#send-list div').click(function(){
