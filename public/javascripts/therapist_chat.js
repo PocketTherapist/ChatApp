@@ -8,7 +8,7 @@ var activeForm;
 
 $(document).ready(function(){
 
-   startTherapistChat($('#room').val(),$('#name').val());
+   startTherapistChat($('#name').val());
 
    socket.on("rooms",function(data){showRoomlists(data)});
    socket.on("message2T",function(data){showMessageU2T(data)});
@@ -20,31 +20,13 @@ $(document).ready(function(){
 
 });
 
-function sendMessageT2U(){
-   var message = $('#sendT2U-message').val();
-   console.log('Therapist Chat MessageT2U:' + message);
 
-   socket.emit('messageT2U',{Message:message});
-
-   $('#therapist_chatlogs').append($('<li>').text(message));
-   $('#therapist_chatlogs').scrollTop($('therapist_chatlogs').prop('scrollHeight'));
-
-   $('#sendT2U-message').val('');
-}
-
-function showMessageU2T(data){
-   console.log("showMessageU2T:" + data.Message);
-   var message = data.Message;
-   $('#therapist_chatlogs').append($('<li>').text(message));
-   $('#therapist_chatlogs').scrollTop($('therapist_chatlogs').prop('scrollHeight'));
-}
-
-
-function startTherapistChat(room,name){
-   console.log("connect to TherapistChat Name:" + name + ",Room:" + room);
-   socket.emit('connect2TherapistNameSpace');
+function startTherapistChat(name){
+   console.log("connect to TherapistChat Name:" + name);
+   socket.emit('connect2TherapistNameSpace',{Name:name});
    console.log("SocketID of therapist:"+ socket.id );
 }
+
 
 function showRoomlists(rooms){
    $('#room-list').empty();
@@ -65,4 +47,24 @@ function showRoomlists(rooms){
 function showMessage(data){
    console.log("addMessage:" + data.Message );
    $('#therapist_chatlogs').append($('<li>').text(data.Message));
+}
+
+
+function sendMessageT2U(){
+   var message = $('#sendT2U-message').val();
+   console.log('Therapist Chat MessageT2U:' + message);
+
+   socket.emit('messageT2U',{Message:message});
+
+   $('#therapist_chatlogs').append($('<li>').text(message));
+   $('#therapist_chatlogs').scrollTop($('therapist_chatlogs').prop('scrollHeight'));
+
+   $('#sendT2U-message').val('');
+}
+
+function showMessageU2T(data){
+   console.log("showMessageU2T:" + data.Message);
+   var message = data.Message;
+   $('#therapist_chatlogs').append($('<li>').text(message));
+   $('#therapist_chatlogs').scrollTop($('therapist_chatlogs').prop('scrollHeight'));
 }
