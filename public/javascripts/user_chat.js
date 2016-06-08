@@ -50,9 +50,6 @@ function showMessageT2U(data){
 }
 
 
-
-
-
 function startChat(room,name){
    console.log("connected to ReceptionChat Name:" + name + ",Room:" + room);
    socketR.emit("connect2ReceptionNameSpace",{ Name:name});
@@ -85,6 +82,8 @@ function answer(questionId,selectedOption,nextId){
                          NextID: nextId});
    $('#OptionButton').parent().remove();
    addMessage({Message:selectedOption});
+   console.log("Socket(TherapistChat) Information:");
+   console.log(therapistChatIO.adapter.rooms);
 }
 
 var livelink;

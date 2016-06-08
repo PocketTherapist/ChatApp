@@ -20,22 +20,26 @@ $(document).ready(function(){
 
 });
 
-
 function startTherapistChat(name){
    console.log("connect to TherapistChat Name:" + name);
    socket.emit('connect2TherapistNameSpace',{Name:name});
-   console.log("SocketID of therapist:"+ socket.id );
 }
 
-
-function showRoomlists(rooms){
+function showRoomlists(data){
    $('#room-list').empty();
-   for(var room in rooms){
-      room = room.substring(1, room.length);
-      if(room !=''){
-         $('#room-list').append(room);
-      }
+/*
+   for(key in Object.keys(data)){
+      console.log(Object.keys(data));
+      $('#room-list').append($('<li>')).text(key);
    }
+*/
+   for(var ir = 0; ir < Number(Object.keys(data).length); ir++){
+      $('#room-list').append($('<li>')).text(ir);
+      $('#room-list').append($('<li>')).text(Object.keys(data)[ir]);
+      console.log(ir);
+      console.log(Object.keys(data)[ir]);
+   }
+
    $('#send-list div').click(function(){
       socket.on('join',{Room:$(this).text()});
       var addComment = $(this).text();
