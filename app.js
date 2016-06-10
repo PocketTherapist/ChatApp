@@ -64,16 +64,16 @@ app.get("/UserLogin",function(req,res){
 });
 
 app.post("/UserHome",function(req,res){
-   console.log('name:' + req.body.name);
-   res.render('UserHome.ejs',{ Name: req.body.name,
-                                    Room: req.body.name});
+   console.log('name:' + req.body.userId);
+   res.render('UserHome.ejs',{ UserID: req.body.userId,
+                              Room: req.body.userId});
 });
 
 //Receptionからホーム画面へ戻る　＆　Receptionの会話を終わらせたとき(こっちは別途作る必要あり)
 app.get("/ToHome",function(req,res){
    console.log('Back to Home');
-   res.render('UserHome.ejs',{Name: req.body.name,
-                              Room: req.body.name});
+   res.render('UserHome.ejs',{UserID: req.body.userId,
+                              Room: req.body.userId});
 });
 
 // ↓　埋め込む内容が違うだけで、同じejsでDBから何を取り出してきて、
@@ -133,9 +133,9 @@ app.get("/TherapistLogin",function(req,res){
 });
 
 app.post("/TherapistHome",function(req,res){
-   console.log('name:' + req.body.name);
-   res.render('TherapistHome.ejs',{ Name: req.body.name,
-                                    Room: req.body.name});
+   console.log('TherapistID:' + req.body.tid);
+   res.render('TherapistHome.ejs',{ TherapistID: req.body.tid,
+                                    Room: req.body.tid});
 });
 
 //=== 管理者サイト
@@ -146,6 +146,6 @@ app.get("/AdministratorLogin",function(req,res){
 
 app.post("/AdministratorHome",function(req,res){
    console.log('name:' + req.body.name);
-   res.render('AdministratorHome.ejs',{ Name: req.body.name,
-                                    Room: req.body.name});
+   res.render('AdministratorHome.ejs',{ AdminID: req.body.aid,
+                                    Room: req.body.aid});
 });

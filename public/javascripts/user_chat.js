@@ -58,6 +58,8 @@ function startChat(room,name){
    //socketB.emit("connect2BookingNameSpace",{Name:name});
 
    activeForm = [1 , 0 , 0 , 0 , 0 , 0 , 0 , 1];
+   // 0:受付、1:腰痛タイプチェック、2：専門家とチャット、3:優良治療院紹介、4:治療院と予約チャット,5:お支払い、6:今までの会話ログ
+
 }
 
 function addMessage(data){
@@ -93,19 +95,25 @@ function showFormButton(data){
       $('#ClinicButton').parent().remove();
    }
    var addComment = '<li> <div id=FormButton>';
-   addComment += '<button type="button" onclick="openForm(\''+ data.Fid + '\')" >' + data.Formname +'</button><br>';
+   addComment += '<button type="button" onclick="openForm(\''+ data.Fid + '\',\''+ data.Name + '\')" >' + data.Formname +'</button><br>';
    addComment += '</div>';
    $('#reception_chatlogs').append($(addComment));
    livelink = true;
 }
 
-function openForm(fid){
+function openForm(fid,name){
    if(livelink){
       $('.content').children('li').css('display','none');
       $('.content').children('li').eq(Number(fid)).css('display','block');
       $('.tab li').removeClass('select');
       $('.tab li').eq(Number(fid)).addClass('select');
       activeForm[Number(fid)] =  1;
+      if(fid === "2"){
+         socketT.emit("userJoin",{Name:name});
+      }
+
+
+
    }else{
       $('#FormButton').parent().remove();
       addMessage({Message:"期限がきれました"});

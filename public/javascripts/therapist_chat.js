@@ -34,17 +34,19 @@ function showRoomlists(data){
    }
 */
    for(var ir = 0; ir < Number(Object.keys(data).length); ir++){
-      $('#room-list').append($('<li>')).text(ir);
-      $('#room-list').append($('<li>')).text(Object.keys(data)[ir]);
+      //$('#room-list').append($('<li>')).text('8'+ir);
+      //$('#room-list').append($('<li>')).text(''+Object.keys(data)[ir]);
+      //$('#room-list').append('<li>' + ir + '</li>');
+      $('#room-list').append('<li>' + ir + ':' + Object.keys(data)[ir] + '</li>');
       console.log(ir);
       console.log(Object.keys(data)[ir]);
    }
 
-   $('#send-list div').click(function(){
+   $('#room-list').click(function(){
       socket.on('join',{Room:$(this).text()});
       var addComment = $(this).text();
       $('#info').append($(addComment));
-      $('#send-message').focus();
+      $('#sendT2U-message').focus();
    });
 }
 
